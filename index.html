@@ -181,6 +181,18 @@ function yesClicked() {
     }, 500);
 }
 
+    card.classList.add("fade-out");
+
+    setTimeout(() => {
+        document.body.innerHTML = `
+            <div class="card success">
+                <h1>Hmmm Good Girl 😌❤️</h1>
+                <p>I really missed you :)</p>
+            </div>
+        `;
+    }, 500);
+}
+
 // NO button escapes
 function moveButton() {
     let button = document.getElementById("no");
