@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Welcome Back 👀</title>
-<canvas id="bg"></canvas>
 
 <style>
     body {
@@ -17,7 +16,29 @@
         overflow: hidden;
     }
 
+    canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 0;
+    }
+
+    .blur-bg {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(0px);
+        transition: backdrop-filter 0.5s ease;
+        z-index: 1;
+    }
+
+    .blur-active {
+        backdrop-filter: blur(12px);
+    }
+
     .card {
+        position: relative;
+        z-index: 2;
         backdrop-filter: blur(15px);
         background: rgba(255, 255, 255, 0.05);
         border-radius: 20px;
@@ -25,26 +46,12 @@
         text-align: center;
         color: #e2e8f0;
         box-shadow: 0 0 40px rgba(0,0,0,0.5);
-        animation: fadeIn 1s ease;
-    }
-    .card {
-    animation: fadeIn 1s ease, glowPulse 3s infinite alternate;
-}
-
-@keyframes glowPulse {
-    from { box-shadow: 0 0 20px rgba(255,255,255,0.1); }
-    to { box-shadow: 0 0 50px rgba(255,255,255,0.3); }
-}
-
-    h1 {
-        font-size: 32px;
-        margin-bottom: 10px;
+        animation: fadeIn 1s ease, float 3s ease-in-out infinite alternate;
+        transition: transform 0.3s ease;
     }
 
-    #text {
-        color: #94a3b8;
-        margin-bottom: 30px;
-    }
+    h1 { font-size: 32px; }
+    #text { color: #94a3b8; margin-bottom: 30px; }
 
     .buttons {
         display: flex;
@@ -57,8 +64,7 @@
         border-radius: 10px;
         border: none;
         cursor: pointer;
-        font-size: 15px;
-        transition: all 0.25s ease;
+        transition: 0.25s;
     }
 
     #yes {
@@ -67,23 +73,24 @@
     }
 
     #yes:hover {
-        transform: scale(1.1);
-        box-shadow: 0 0 20px rgba(34,197,94,0.6);
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 10px 25px rgba(34,197,94,0.4);
     }
 
     #no {
-        background: #334855;
+        background: #334155;
         color: #e2e8f0;
         position: relative;
-    }
-
-    #no:hover {
-        background: #475569;
     }
 
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(30px); }
         to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+        from { transform: translateY(0); }
+        to { transform: translateY(-10px); }
     }
 
     .fade-out {
@@ -102,16 +109,32 @@
         from { opacity: 0; transform: scale(0.5); }
         to { opacity: 1; transform: scale(1); }
     }
-    canvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: -1;
+
+    /* Cursor glow */
+    .cursor {
+        position: fixed;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.6);
+        pointer-events: none;
+        z-index: 3;
+        transition: transform 0.1s ease;
+    }
+    .hint {
+        margin-top: 15px;
+        font-size: 12px;
+        color: rgba(255,255,255,0.3);
+        letter-spacing: 1px;
     }
 </style>
 </head>
 
 <body>
+
+<canvas id="bg"></canvas>
+<div class="blur-bg" id="blur"></div>
+<div class="cursor" id="cursor"></div>
 
 <div class="card" id="card">
     <h1 id="heading"></h1>
@@ -121,126 +144,79 @@
         <button id="yes" onclick="yesClicked()">YES 😌</button>
         <button id="no" onmouseover="moveButton()">NO 😶</button>
     </div>
+    <p class="hint">( don’t try to click NO )</p>
 </div>
 
 <script>
-// Typing effect
-let message = "Welcome back pookie...";
+// Typing
+let msg = "Welcome back pookie...";
 let i = 0;
-
-function typeEffect() {
-    if (i < message.length) {
-        document.getElementById("heading").innerHTML += message.charAt(i);
-        i++;
-        setTimeout(typeEffect, 50);
+function type() {
+    if (i < msg.length) {
+        heading.innerHTML += msg[i++];
+        setTimeout(type, 35);
     } else {
-        document.getElementById("text").innerText = "did you miss me? 👀";
+        text.innerText = "did you miss me? 👀";
     }
 }
+type();
 
-typeEffect();
-
+// Cinematic YES
 function yesClicked() {
-    let card = document.getElementById("card");
+    blur.classList.add("blur-active");
+    card.style.transform = "scale(1.08)";
 
-    // hearts
-    for (let i = 0; i < 20; i++) {
-        let heart = document.createElement("div");
-        heart.innerHTML = "💖";
-        heart.style.position = "fixed";
-        heart.style.left = "50%";
-        heart.style.top = "50%";
-        heart.style.fontSize = "20px";
-        heart.style.pointerEvents = "none";
-
-        document.body.appendChild(heart);
-
-        let x = (Math.random() - 0.5) * 600;
-        let y = (Math.random() - 0.5) * 600;
-
-        heart.animate([
-            { transform: "translate(0,0)", opacity: 1 },
-            { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
-        ], {
-            duration: 1000,
-            easing: "ease-out"
-        });
-
-        setTimeout(() => heart.remove(), 1000);
-    }
-
-    card.classList.add("fade-out");
+    setTimeout(() => card.classList.add("fade-out"), 200);
 
     setTimeout(() => {
         document.body.innerHTML = `
+            <div class="blur-bg blur-active"></div>
             <div class="card success">
                 <h1>Hmmm Good Girl 😌❤️</h1>
                 <p>I really missed you :)</p>
             </div>
         `;
-    }, 500);
+    }, 700);
 }
 
-    card.classList.add("fade-out");
-
-    setTimeout(() => {
-        document.body.innerHTML = `
-            <div class="card success">
-                <h1>Hmmm Good Girl 😌❤️</h1>
-                <p>I really missed you :)</p>
-            </div>
-        `;
-    }, 500);
-}
-
-// NO button escapes
+// NO escape
 function moveButton() {
-    let button = document.getElementById("no");
-
-    button.style.position = "absolute";
-
-    let x = Math.random() * (window.innerWidth - 120);
-    let y = Math.random() * (window.innerHeight - 60);
-
-    button.style.left = x + "px";
-    button.style.top = y + "px";
+    no.style.position = "absolute";
+    no.style.left = Math.random() * (innerWidth - 120) + "px";
+    no.style.top = Math.random() * (innerHeight - 60) + "px";
 }
+
 // Particle background
-const canvas = document.getElementById("bg");
-const ctx = canvas.getContext("2d");
+const c = bg.getContext("2d");
+bg.width = innerWidth;
+bg.height = innerHeight;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let p = Array.from({length:60},()=>({
+    x:Math.random()*bg.width,
+    y:Math.random()*bg.height,
+    dx:(Math.random()-0.5),
+    dy:(Math.random()-0.5),
+    r:Math.random()*2
+}));
 
-let particles = [];
-
-for (let i = 0; i < 80; i++) {
-    particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 2,
-        dx: (Math.random() - 0.5),
-        dy: (Math.random() - 0.5)
+function draw(){
+    c.clearRect(0,0,bg.width,bg.height);
+    p.forEach(a=>{
+        a.x+=a.dx; a.y+=a.dy;
+        c.beginPath();
+        c.arc(a.x,a.y,a.r,0,6.28);
+        c.fillStyle="rgba(255,255,255,0.5)";
+        c.fill();
     });
+    requestAnimationFrame(draw);
 }
+draw();
 
-function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    particles.forEach(p => {
-        p.x += p.dx;
-        p.y += p.dy;
-
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(255,255,255,0.5)";
-        ctx.fill();
-    });
-
-    requestAnimationFrame(animateParticles);
-}
-
-animateParticles();
+// Cursor glow
+document.addEventListener("mousemove", e=>{
+    cursor.style.left = e.clientX+"px";
+    cursor.style.top = e.clientY+"px";
+});
 </script>
 
 </body>
