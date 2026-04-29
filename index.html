@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Welcome Back 👀</title>
+<canvas id="bg"></canvas>
+
+<style>
+    body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        font-family: 'Segoe UI', sans-serif;
+        overflow: hidden;
+    }
+
+    .card {
+        backdrop-filter: blur(15px);
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 50px;
+        text-align: center;
+        color: #e2e8f0;
+        box-shadow: 0 0 40px rgba(0,0,0,0.5);
+        animation: fadeIn 1s ease;
+    }
+    .card {
+    animation: fadeIn 1s ease, glowPulse 3s infinite alternate;
+}
+
+@keyframes glowPulse {
+    from { box-shadow: 0 0 20px rgba(255,255,255,0.1); }
+    to { box-shadow: 0 0 50px rgba(255,255,255,0.3); }
+}
+
+    h1 {
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    #text {
+        color: #94a3b8;
+        margin-bottom: 30px;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    button {
+        padding: 12px 28px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 15px;
+        transition: all 0.25s ease;
+    }
+
+    #yes {
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white;
+    }
+
+    #yes:hover {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(34,197,94,0.6);
+    }
+
+    #no {
+        background: #334855;
+        color: #e2e8f0;
+        position: relative;
+    }
+
+    #no:hover {
+        background: #475569;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-out {
+        animation: fadeOut 0.6s forwards;
+    }
+
+    @keyframes fadeOut {
+        to { opacity: 0; transform: scale(0.9); }
+    }
+
+    .success {
+        animation: popIn 0.8s ease;
+    }
+
+    @keyframes popIn {
+        from { opacity: 0; transform: scale(0.5); }
+        to { opacity: 1; transform: scale(1); }
+    }
+    canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+    <h1 id="heading"></h1>
+    <p id="text"></p>
+
+    <div class="buttons">
+        <button id="yes" onclick="yesClicked()">YES 😌</button>
+        <button id="no" onmouseover="moveButton()">NO 😶</button>
+    </div>
+</div>
+
+<script>
+// Typing effect
+let message = "Welcome back pookie...";
+let i = 0;
+
+function typeEffect() {
+    if (i < message.length) {
+        document.getElementById("heading").innerHTML += message.charAt(i);
+        i++;
+        setTimeout(typeEffect, 50);
+    } else {
+        document.getElementById("text").innerText = "did you miss me? 👀";
+    }
+}
+
+typeEffect();
+
+function yesClicked() {
+    let card = document.getElementById("card");
+
+    // hearts
+    for (let i = 0; i < 20; i++) {
+        let heart = document.createElement("div");
+        heart.innerHTML = "💖";
+        heart.style.position = "fixed";
+        heart.style.left = "50%";
+        heart.style.top = "50%";
+        heart.style.fontSize = "20px";
+        heart.style.pointerEvents = "none";
+
+        document.body.appendChild(heart);
+
+        let x = (Math.random() - 0.5) * 600;
+        let y = (Math.random() - 0.5) * 600;
+
+        heart.animate([
+            { transform: "translate(0,0)", opacity: 1 },
+            { transform: `translate(${x}px, ${y}px)`, opacity: 0 }
+        ], {
+            duration: 1000,
+            easing: "ease-out"
+        });
+
+        setTimeout(() => heart.remove(), 1000);
+    }
+
+    card.classList.add("fade-out");
+
+    setTimeout(() => {
+        document.body.innerHTML = `
+            <div class="card success">
+                <h1>Hmmm Good Girl 😌❤️</h1>
+                <p>I really missed you :)</p>
+            </div>
+        `;
+    }, 500);
+}
+
+// NO button escapes
+function moveButton() {
+    let button = document.getElementById("no");
+
+    button.style.position = "absolute";
+
+    let x = Math.random() * (window.innerWidth - 120);
+    let y = Math.random() * (window.innerHeight - 60);
+
+    button.style.left = x + "px";
+    button.style.top = y + "px";
+}
+// Particle background
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for (let i = 0; i < 80; i++) {
+    particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2,
+        dx: (Math.random() - 0.5),
+        dy: (Math.random() - 0.5)
+    });
+}
+
+function animateParticles() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+        p.x += p.dx;
+        p.y += p.dy;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(255,255,255,0.5)";
+        ctx.fill();
+    });
+
+    requestAnimationFrame(animateParticles);
+}
+
+animateParticles();
+</script>
+
+</body>
+</html>
