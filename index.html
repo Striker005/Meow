@@ -2,115 +2,197 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mr genie Cat 👀</title>
+<title>Mr Genie Cat 👀</title>
 
 <style>
-    body {
-        margin: 0;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background: linear-gradient(135deg, #1f2937, #111827);
-        color: #e5e7eb;
-        font-family: 'Segoe UI', sans-serif;
-        text-align: center;
-    }
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(circle at center, #1f2937, #020617);
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+}
 
-    h1 {
-        font-size: 36px;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
+/* Glow cursor */
+.cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(16,185,129,0.6);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    filter: blur(10px);
+}
 
-    #text {
-        font-size: 18px;
-        color: #9ca3af;
-        margin-bottom: 30px;
-    }
+/* Main container */
+.container {
+    text-align: center;
+    animation: fadeIn 1.5s ease;
+}
 
-    .buttons {
-        display: flex;
-        gap: 20px;
-    }
+h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
 
-    button {
-        padding: 12px 28px;
-        font-size: 16px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: 0.25s;
-    }
+#text {
+    margin-top: 10px;
+    color: #9ca3af;
+    font-size: 18px;
+}
 
-    #yes {
-        background: #10b981;
-        color: white;
-    }
+/* Buttons */
+.buttons {
+    margin-top: 40px;
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+}
 
-    #yes:hover {
-        background: #059669;
-    }
+button {
+    padding: 14px 30px;
+    border-radius: 12px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
 
-    #no {
-        background: #374151;
-        color: #e5e7eb;
-        position: relative;
-    }
+/* YES button */
+#yes {
+    background: linear-gradient(45deg, #10b981, #22c55e);
+    color: white;
+    box-shadow: 0 0 20px rgba(16,185,129,0.5);
+}
 
-    #no:hover {
-        background: #4b5563;
-    }
+#yes:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 35px rgba(16,185,129,0.8);
+}
+
+/* NO button */
+#no {
+    background: #1f2937;
+    color: #e5e7eb;
+    position: relative;
+}
+
+/* hidden message */
+.warn {
+    position: absolute;
+    bottom: 20px;
+    font-size: 12px;
+    opacity: 0.2;
+}
+
+/* Floating particles */
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    opacity: 0.3;
+    border-radius: 50%;
+    animation: float 10s linear infinite;
+}
+
+/* Animations */
+@keyframes float {
+    from { transform: translateY(100vh); }
+    to { transform: translateY(-10vh); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
 </style>
 </head>
 
 <body>
 
-<h1 id="heading"></h1>
-<p id="text"></p>
+<div class="cursor" id="cursor"></div>
 
-<div class="buttons">
-    <button id="yes" onclick="yesClicked()">YES 😌</button>
-    <button id="no" onmouseover="moveButton()">NO 😶</button>
+<div class="container">
+    <h1 id="heading"></h1>
+    <p id="text"></p>
+
+    <div class="buttons">
+        <button id="yes" onclick="yesClicked()">YES 😌</button>
+        <button id="no" onmouseover="moveButton()">NO 😶</button>
+    </div>
+
+    <div class="warn">dont try to click no</div>
 </div>
 
 <script>
-// Typing effect
-let message = "Question for YOU...";
+// typing effect
+let msg = "Question for YOU...";
 let i = 0;
 
 function typeEffect() {
-    if (i < message.length) {
-        document.getElementById("heading").innerHTML += message.charAt(i);
+    if (i < msg.length) {
+        document.getElementById("heading").innerHTML += msg.charAt(i);
         i++;
         setTimeout(typeEffect, 50);
     } else {
-        document.getElementById("text").innerText = "do you wanna be my wife? 🙃👀";
+        document.getElementById("text").innerText =
+        "do you wanna be my wife? 🙃👀";
     }
 }
-
 typeEffect();
 
-// YES clicked
+// YES click cinematic
 function yesClicked() {
     document.body.innerHTML = `
-        <h1>Good Girl 😌❤️</h1>
-        <p>yesssssss thats it ;)</p>
+        <div style="
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+            flex-direction:column;
+            animation: fadeIn 1s ease;
+        ">
+            <h1 style="font-size:50px;">Good Girl 😌❤️</h1>
+            <p>yesssssss thats it ;)</p>
+        </div>
     `;
 }
 
-// NO button escapes
+// NO button escape
 function moveButton() {
-    let button = document.getElementById("no");
+    let btn = document.getElementById("no");
 
-    button.style.position = "absolute";
+    btn.style.position = "absolute";
 
     let x = Math.random() * (window.innerWidth - 120);
     let y = Math.random() * (window.innerHeight - 60);
 
-    button.style.left = x + "px";
-    button.style.top = y + "px";
+    btn.style.left = x + "px";
+    btn.style.top = y + "px";
+}
+
+// cursor glow
+document.addEventListener("mousemove", e => {
+    let cursor = document.getElementById("cursor");
+    cursor.style.left = e.clientX + "px";
+    cursor.style.top = e.clientY + "px";
+});
+
+// particles generator
+for (let i = 0; i < 40; i++) {
+    let p = document.createElement("div");
+    p.classList.add("particle");
+    p.style.left = Math.random() * 100 + "vw";
+    p.style.animationDuration = (5 + Math.random() * 5) + "s";
+    document.body.appendChild(p);
 }
 </script>
 
