@@ -1,4 +1,231 @@
-// Balloons
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Happy Birthday, Ankit! 🎉</title>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #FFD700;
+    --orange: #FF6B35;
+    --pink: #FF3CAC;
+    --blue: #2BD2FF;
+    --purple: #784BA0;
+    --bg: #0a0010;
+  }
+
+  body {
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Nunito', sans-serif;
+    position: relative;
+  }
+
+  .stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    animation: twinkle var(--d) ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { from { opacity: 0.1; transform: scale(0.8); } to { opacity: 1; transform: scale(1.2); } }
+
+  #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 10; }
+
+  .card {
+    position: relative; z-index: 20;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+    border: 1.5px solid rgba(255,255,255,0.15);
+    border-radius: 32px;
+    padding: 3rem 2.5rem 2.5rem;
+    max-width: 540px; width: 92vw;
+    text-align: center;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 60px rgba(255,60,172,0.25), 0 0 120px rgba(43,210,255,0.1);
+    animation: cardIn 1s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(60px) scale(0.9); }
+    to   { opacity: 1; transform: translateY(0)   scale(1);   }
+  }
+
+  .cake-wrap { font-size: 4.5rem; animation: bounce 1.6s ease-in-out infinite; display: block; margin-bottom: 0.5rem; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+
+  .hbd {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(1.5rem, 6vw, 2.4rem);
+    background: linear-gradient(90deg, var(--gold), var(--orange), var(--pink), var(--blue));
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 3s linear infinite;
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+  @keyframes shimmer { to { background-position: 300% center; } }
+
+  .name {
+    font-family: 'Pacifico', cursive;
+    font-size: clamp(2.4rem, 9vw, 4rem);
+    background: linear-gradient(90deg, var(--blue), var(--pink), var(--gold));
+    background-size: 300%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 2s linear infinite reverse;
+    display: block;
+    margin-bottom: 1.2rem;
+  }
+
+  .divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--pink), transparent);
+    margin: 0 auto 1.4rem;
+    width: 70%;
+    border-radius: 99px;
+    animation: glowDiv 2s ease-in-out infinite alternate;
+  }
+  @keyframes glowDiv { from { opacity: 0.5; } to { opacity: 1; box-shadow: 0 0 12px var(--gold); } }
+
+  .msg {
+    color: rgba(255,255,255,0.88);
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    line-height: 1.8;
+    margin-bottom: 1.4rem;
+  }
+  .msg .late { color: var(--gold); font-weight: 900; font-size: 1.05em; }
+  .msg .wink { display: inline-block; animation: wink 3s ease-in-out infinite; }
+  @keyframes wink { 0%,90%,100% { transform: scale(1) rotate(0deg); } 95% { transform: scale(1.4) rotate(-15deg); } }
+
+  .borah-box {
+    background: linear-gradient(135deg, rgba(43,210,255,0.12), rgba(255,60,172,0.12));
+    border: 1px solid rgba(255,255,255,0.2);
+
+  border-radius: 18px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .borah-box::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%);
+    background-size: 200%;
+    animation: sweep 3s linear infinite;
+  }
+  @keyframes sweep { to { background-position: 200% center; } }
+  .borah-label {
+    font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
+    color: var(--blue); font-weight: 900; margin-bottom: 0.5rem;
+  }
+  .borah-wish {
+    color: rgba(255,255,255,0.9);
+    font-size: clamp(0.85rem, 3.2vw, 1rem);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .from {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    color: rgba(255,255,255,0.7);
+    margin-top: 0.8rem;
+  }
+  .from span { color: var(--pink); font-weight: 900; font-size: 1.1em; }
+
+  .balloons { position: fixed; bottom: -120px; width: 100%; pointer-events: none; z-index: 5; }
+  .balloon {
+    position: absolute;
+    font-size: 2.8rem;
+    animation: floatUp var(--dur) ease-in var(--delay) infinite;
+    bottom: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(-110vh) rotate(20deg); opacity: 0; }
+  }
+
+  .btn {
+    display: inline-block;
+    margin-top: 1.2rem;
+    padding: 0.7rem 2rem;
+    background: linear-gradient(90deg, var(--pink), var(--orange), var(--gold));
+    background-size: 200%;
+    border: none; border-radius: 50px;
+    color: #fff; font-family: 'Nunito', sans-serif;
+    font-size: 1rem; font-weight: 900;
+    cursor: pointer; letter-spacing: 0.05em;
+    animation: shimmer 2s linear infinite;
+    box-shadow: 0 4px 20px rgba(255,60,172,0.4);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn:hover { transform: scale(1.06); box-shadow: 0 6px 30px rgba(255,60,172,0.6); }
+  .btn:active { transform: scale(0.97); }
+
+ 
+</style>
+</head>
+<body>
+
+<canvas id="confettiCanvas"></canvas>
+<div class="stars" id="stars"></div>
+<div class="balloons" id="balloons"></div>
+
+<div class="card">
+  <span class="cake-wrap">🎂</span>
+  <div class="hbd">Happy Birthday</div>
+  <span class="name">Ankit!</span>
+  <div class="divider"></div>
+
+  <p class="msg">
+    Hey Ankit duddeee! 🥳<br/>
+    This is your <strong style="color:var(--gold)">unique gift</strong> — it's <em>this</em> <span class="wink">😉</span><br/>
+    <span class="late">Sorry for the late wish</span> — blame the jumble codes! 🤭
+  </p>
+
+  <div class="borah-box">
+    <div class="borah-label">✨ Borah's family Birthday Wish for You</div>
+    <p class="borah-wish">
+      "Ankit, may this birthday mark the start of your greatest chapter yet —
+      filled with unstoppable energy, brilliant ideas, and laughter that never runs out.
+      You deserve every joy, every success, and every little moment that makes life magical.
+      Here's to YOU — shine bright, always! 🌟"
+
+      BTW gift tu kenekua lagile koba dei...mur mane code khini r karone deri hoi gol
+    </p>
+  </div>
+
+  <p class="from">
+    With all the love & warmth 💛<br/>
+    <span>— The Borah Family 😙</span>
+  </p>
+
+  <button class="btn" onclick="burst()">🎊 Pop More Confetti!</button>
+</div>
+
+<element></element>
+<script>
+  // Stars
+  const starsEl = document.getElementById('stars');
+  for (let i = 0; i < 120; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    s.style.cssText = width:${size}px;height:${size}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+1).toFixed(1)}s;animation-delay:${(Math.random()*4).toFixed(1)}s;
+    starsEl.appendChild(s);
+  }
+  // Balloons
   const emojis = ['🎈','🎈','🎉','🎊','💛','🌟','🎈'];
   const balloonsEl = document.getElementById('balloons');
   for (let i = 0; i < 10; i++) {
